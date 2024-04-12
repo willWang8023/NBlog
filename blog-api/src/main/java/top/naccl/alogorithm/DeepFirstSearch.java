@@ -5,6 +5,18 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 在不需要计算边的属性是可以不要实际的边，直接用List属性代替，如果要计算边的权重信息，就需要通过边来构造图
+ *                      1
+ *                     / \
+ *                    /   \
+ *                   2     3
+ *                  / \    | \
+ *                 /   \   |  \
+ *                4     5  6  7
+ *                 \     \/   /
+ *                  ---->8<--
+ */
 public class DeepFirstSearch {
 
     public static void main(String[] args){
