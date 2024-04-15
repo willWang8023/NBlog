@@ -1,4 +1,4 @@
-package top.naccl.alogorithm;
+package top.naccl.algorithm;
 
 import org.apache.commons.lang3.ObjectUtils;
 

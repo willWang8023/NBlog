@@ -1,4 +1,4 @@
-package top.naccl.alogorithm;
+package top.naccl.algorithm;
 
 /**
  * 分别从初始序列“6 1 2 7 9 3 4 5 10 8”两端开始“探测”。先从右往左找一个小于6的数，再从左往右找一个大于6的数，

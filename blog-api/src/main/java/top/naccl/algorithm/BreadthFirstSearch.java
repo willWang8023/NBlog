@@ -1,9 +1,11 @@
-package top.naccl.alogorithm;
+package top.naccl.algorithm;
 
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * 在不需要计算边的属性是可以不要实际的边，直接用List属性代替，如果要计算边的权重信息，就需要通过边来构造图
@@ -17,7 +19,7 @@ import java.util.List;
  *                 \     \/   /
  *                  ---->8<--
  */
-public class DeepFirstSearch {
+public class BreadthFirstSearch {
 
     public static void main(String[] args){
         GraphNode node1 = new GraphNode();
@@ -57,25 +59,24 @@ public class DeepFirstSearch {
         node4.setChildList(node8List);
         node5.setChildList(node8List);
         node6.setChildList(node8List);
-
-        List<GraphNode> visited = new ArrayList<>();
-        dfs(node1,visited);
+        bfs(node1);
     }
 
-    public static GraphNode dfs(GraphNode node, List<GraphNode> visited){
-        if(visited.contains(node)){
-            return node;
-        }
+    public static void bfs(GraphNode node) {
+        List<GraphNode> visited = new ArrayList<>(); // 已经被访问过的元素
+        Queue<GraphNode> q = new LinkedList<>(); // 用队列存放依次要遍历的元素
+        q.offer(node);
 
-        visited.add(node);
-        System.out.println(node.getLabel());
-        if(!node.childList.isEmpty()){
-            for(int i = 0; i<node.childList.size(); i++){
-                GraphNode graphNode = node.getChildList().get(i);
-                dfs(graphNode, visited);
+        while (!q.isEmpty()) {
+            GraphNode currNode = q.poll();
+            if (!visited.contains(currNode)) {
+                visited.add(currNode);
+                System.out.println("节点：" + currNode.getLabel());
+                for (int i = 0; i < currNode.childList.size(); i++) {
+                    q.offer(currNode.childList.get(i));
+                }
             }
         }
-        return node;
     }
 
     @Data
