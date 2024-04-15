@@ -1,4 +1,4 @@
-package top.naccl.alogorithm;
+package top.naccl.algorithm;
 
 /**
  * 环形数组获取数据,每查找一次，耗时一秒，返回总共消耗的时间
