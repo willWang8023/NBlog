@@ -1,4 +1,4 @@
-package top.naccl.alogorithm;
+package top.naccl.algorithm;
 
 /**
  * 用一个 非空 单链表来表示一个非负整数，然后将这个整数加一。

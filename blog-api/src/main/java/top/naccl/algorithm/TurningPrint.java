@@ -1,4 +1,4 @@
-package top.naccl.alogorithm;
+package top.naccl.algorithm;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.locks.Condition;
