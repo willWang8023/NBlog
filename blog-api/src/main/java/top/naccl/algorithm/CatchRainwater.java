@@ -9,7 +9,7 @@ import java.util.List;
  * 给定n个非负整数表示每个宽度为1的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
  * ^
  * |
- * |                            ___
+ * |                             ___
  * 3|            ___            |   |___     ___
  * 2|    ___    |   |___     ___|       |___|   |___
  * 1| 0 | 1 | 0 | 2   1 | 0 | 1   3   2   1   2   1 |
@@ -22,8 +22,65 @@ public class CatchRainwater {
     public static void main(String[] args) {
         List<Integer> pillars = Arrays.asList(0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1);
 //        int contain = trap(pillars);
-        int contain = memorandumTrap(pillars);
+//        int contain = memorandumTrap(pillars);
+        int contain = doublePointTrap(pillars);
         System.out.println("catch rain water:" + contain);
+    }
+
+    /**
+     * 三、双指针解法
+     * 这种解法的思路是完全相同的，但在实现手法上非常巧妙，我们这次也不要用备忘录提前计算了，而是用双指针边走边算，节省下空间复杂度。
+     * 首先，看一部分代码：
+     * int trap(List<Integer> heights) {
+     * int n = height.size();
+     * int left = 0, right = n - 1;
+     * // 初始化左侧和右侧的最边上的高度
+     * int l_max = height.get(0);
+     * int r_max = height.get(n - 1);
+     * // 如果指针没有相遇继续执行
+     * while (left <= right) {
+     * l_max = max(l_max, height.get(left));
+     * r_max = max(r_max, height.get(right));
+     * left++; right--;
+     * }
+     * }
+     * l_max 是 height[0..left] 中最高柱子的高度，r_max 是 height[right..end] 的最高柱子的高度。
+     * 之前的备忘录解法，l_max[i] 和 r_max[i] 代表的是 height[0..i] 和 height[i..end] 的最高柱子高度。
+     * ans += min(l_max[i], r_max[i]) - height[i];
+     * 但是双指针解法中，l_max 和 r_max 代表的是 height[0..left] 和 height[right..end] 的最高柱子高度。比如这段代码：
+     * if (l_max < r_max) {
+     * ans += l_max - height[left];
+     * left++;
+     * }
+     *
+     * @param heights 高度数组
+     * @return 可以接受的雨水总量
+     */
+    public static Integer doublePointTrap(List<Integer> heights) {
+        if (CollectionUtils.isEmpty(heights)) {
+            return 0;
+        }
+        int n = heights.size();
+        int left = 0, right = n - 1;
+        int ans = 0;
+
+        int l_max = heights.get(0);
+        int r_max = heights.get(n - 1);
+
+        while (left <= right) {
+            l_max = Math.max(l_max, heights.get(left));
+            r_max = Math.max(r_max, heights.get(right));
+
+            // 计算交底的一侧的可以接住的雨水量，取交底的一侧的最高值减去当前的高度
+            if (l_max < r_max) {
+                ans += l_max - heights.get(left);
+                left++;
+            } else {
+                ans += r_max - heights.get(right);
+                right--;
+            }
+        }
+        return ans;
     }
 
     /**
@@ -38,7 +95,7 @@ public class CatchRainwater {
      * @return 接到的雨水量
      */
     public static Integer memorandumTrap(List<Integer> heights) {
-        if(CollectionUtils.isEmpty(heights)){
+        if (CollectionUtils.isEmpty(heights)) {
             return 0;
         }
         int n = heights.size();
@@ -48,18 +105,18 @@ public class CatchRainwater {
         List<Integer> r_max = Arrays.asList(new Integer[n]);
         // 初始化 base case
         l_max.set(0, heights.get(0));
-        r_max.set(n-1, heights.get(n-1));
+        r_max.set(n - 1, heights.get(n - 1));
         // 从左向右计算l_max,对于当前位置来说左侧最高的柱子高度
-        for(int i = 1; i < n; i++){
-            l_max.set(i, Math.max(l_max.get(i-1), heights.get(i)));
+        for (int i = 1; i < n; i++) {
+            l_max.set(i, Math.max(l_max.get(i - 1), heights.get(i)));
         }
         // 从右往左计算r_max,对于当前位置来说右侧最高的柱子高度
-        for(int i = n-2; i >= 0; i--){
-            r_max.set(i, Math.max(r_max.get(i+1), heights.get(i)));
+        for (int i = n - 2; i >= 0; i--) {
+            r_max.set(i, Math.max(r_max.get(i + 1), heights.get(i)));
         }
         // 计算答案
-        for(int i = 1; i < n-1; i++){
-            ans += Math.min(l_max.get(i), r_max.get(i)) -heights.get(i);
+        for (int i = 1; i < n - 1; i++) {
+            ans += Math.min(l_max.get(i), r_max.get(i)) - heights.get(i);
         }
         return ans;
     }
@@ -90,8 +147,8 @@ public class CatchRainwater {
      * 这个解法应该是很直接粗暴的，时间复杂度 O(N^2)，空间复杂度 O(1)。
      * 但是很明显这种计算 r_max 和 l_max 的方式非常笨拙，
      *
-     * @param heights
-     * @return
+     * @param heights 高度列表
+     * @return 可以接受的雨水量
      */
     public static int trap(List<Integer> heights) {
         int n = heights.size();
