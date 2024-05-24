@@ -2,6 +2,7 @@ package top.naccl.algorithm;
 
 /**
  * 两个数组合并
+ * =============================================================
  * 1. 问题描述：
  * 	对于两个有序数组arrayM，arrayN，长度分别为m和n；将这两个数组合并成一个数组并进行排序，要求时间复杂度为O（m+n）；
  * 2. 解题思路：
@@ -10,7 +11,7 @@ package top.naccl.algorithm;
  * 	通过分别遍历数组arrayM和arrayN的方式来比较每个值的大小，并将值存放到res中；
  * 	判断indexM和indexN是否分别小于m、n，如果小于则继续执行，否则则表示有一个array遍历结束，需要单独对另一个array操作；
  */
-public class AddTwoAarrays {
+public class _2AddTwoAarrays {
 
     public static void main(String[] args) {
         int[] a = { 1, 3, 5 };
