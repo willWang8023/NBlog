@@ -35,6 +35,46 @@ public class _6ZShapedTransformation {
     }
 
     /**
+     * 压缩矩阵空间
+     * ===========================================================================
+     * 方法一中的矩阵有大量的空间没有被使用，能否优化呢？
+     * 注意到每次往矩阵的某一行添加字符时，都会添加到该行上一个字符的右侧，且最后组成答案时只会用
+     * 到每行的非空字符。因此我们可以将矩阵的每行初始化为一个空列表，每次向某一行添加字符时，添加
+     * 到该行的列表末尾即可。
+     *
+     * @return Z型转换后的字符串
+     */
+    public static String convertZ_2(String s, int rowNums){
+        int n = s.length(), r = rowNums;
+        if(r == 1 || r >= n){
+            return s;
+        }
+        // 算周期是为了计算矩阵的列，如果将矩阵的每行初始化为一个空列表，这不需要计算周期，和列
+        StringBuffer[] mat = new StringBuffer[r];
+        // 给矩阵的每行初始化为一个空列表
+        for (int i = 0; i < r; ++i) {
+            mat[i] = new StringBuffer();
+        }
+        int t = r * 2 - 2;
+        // x是行的索引
+        for(int i = 0, x = 0; i < n; ++i){
+            mat[x].append(s.charAt(i));
+            // 每个周期会占用矩阵上的 1+r−2=r−1 列
+            if(i % t < r-1){
+                ++ x;
+            } else {
+                -- x;
+            }
+        }
+        // 按行输出转换后的字符串
+        StringBuilder ans = new StringBuilder();
+        for(StringBuffer row : mat){
+            ans.append(row);
+        }
+        return ans.toString();
+    }
+
+    /**
      * 利用二维矩阵模拟
      * ===========================================================================
      * 设 n 为字符串 s 的长度，r=numRows。对于 r=1（只有一行）或者 r≥n（只有一列）的情况，
@@ -65,6 +105,7 @@ public class _6ZShapedTransformation {
         char[][] mat = new char[r][c];
         for(int i = 0, x = 0, y = 0; i < n; ++i){
             mat[x][y] = s.charAt(i);
+            // 每个周期会占用矩阵上的 1+r−2=r−1 列
             if(i % t < r - 1){
                 ++ x; // 向下移动
             }else{
