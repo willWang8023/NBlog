@@ -28,10 +28,45 @@ package top.naccl.algorithm;
  */
 public class _6ZShapedTransformation {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         String s = "PAYPALISHIRING";
-        String convertStr = convertZ_1(s, 2);
+        String convertStr = convertZ_3(s, 2);
         System.out.println(convertStr);
+    }
+
+    /**
+     * 直接构造
+     * =============================================================================
+     * 我们来研究方法一中矩阵的每个非空字符会对应到 s 的哪个下标（记作 idx），从而直接构造出答案。
+     * 由于 Z 字形变换的周期为 t=2r−2，因此对于矩阵第一行的非空字符，其对应的 idx 均为 t 的倍数，
+     * 即 idx ≡ 0 (mod t)；同理，对于矩阵最后一行的非空字符，应满足 idx ≡ r−1(mod t)。
+     * 对于矩阵的其余行（行号设为 i），每个周期内有两个字符，第一个字符满足 idx ≡ i (mod t)，第二个字
+     * 符满足 idx ≡ t−i (mod t)。
+     * idx ≡ 0 (mod t)： 当我们将dx除以t时，余数为0。换句话说，dx是t的倍数
+     *
+     * @param s       源字符串
+     * @param rowNums 指定转换的行数
+     * @return Z型变换后的字符串
+     */
+    public static String convertZ_3(String s, int rowNums) {
+        int n = s.length(), r = rowNums;
+        if (r == 1 || r >= n) {
+            return s;
+        }
+        // Z 字形变换的周期
+        int t = r * 2 - 2;
+        StringBuilder ans = new StringBuilder();
+        // 枚举矩阵的行
+        for (int i = 0; i < r; i++) {
+            // 枚举每个周期的起始
+            for (int j = 0; j < n - i; j += t) {
+                ans.append(s.charAt(j + i));  // 当前周期的第一个字符
+                if (0 < i && i < r - 1 && j + t - i < n) {
+                    ans.append(s.charAt(j + t - i)); // 当前周期的第二个字符
+                }
+            }
+        }
+        return ans.toString();
     }
 
     /**
@@ -44,9 +79,9 @@ public class _6ZShapedTransformation {
      *
      * @return Z型转换后的字符串
      */
-    public static String convertZ_2(String s, int rowNums){
+    public static String convertZ_2(String s, int rowNums) {
         int n = s.length(), r = rowNums;
-        if(r == 1 || r >= n){
+        if (r == 1 || r >= n) {
             return s;
         }
         // 算周期是为了计算矩阵的列，如果将矩阵的每行初始化为一个空列表，这不需要计算周期，和列
@@ -57,18 +92,18 @@ public class _6ZShapedTransformation {
         }
         int t = r * 2 - 2;
         // x是行的索引
-        for(int i = 0, x = 0; i < n; ++i){
+        for (int i = 0, x = 0; i < n; ++i) {
             mat[x].append(s.charAt(i));
             // 每个周期会占用矩阵上的 1+r−2=r−1 列
-            if(i % t < r-1){
-                ++ x;
+            if (i % t < r - 1) {
+                ++x;
             } else {
-                -- x;
+                --x;
             }
         }
         // 按行输出转换后的字符串
         StringBuilder ans = new StringBuilder();
-        for(StringBuffer row : mat){
+        for (StringBuffer row : mat) {
             ans.append(row);
         }
         return ans.toString();
@@ -89,33 +124,33 @@ public class _6ZShapedTransformation {
      * 则向下移动，否则向右上移动。
      * 填写完成后，逐行扫描矩阵中的非空字符，组成答案。
      *
-     * @param s 给定字符串
+     * @param s       给定字符串
      * @param rowNums 指定转换的行数
      * @return Z型变换后的字符串
      */
-    public static String convertZ_1(String s, int rowNums){
+    public static String convertZ_1(String s, int rowNums) {
         int n = s.length(), r = rowNums;
-        if(r == 1 || r >= n){
+        if (r == 1 || r >= n) {
             return s;
         }
         int t = r * 2 - 2;
-        int c = (int)Math.ceil((double) n /t) * (r - 1);
+        int c = (int) Math.ceil((double) n / t) * (r - 1);
         // 向上取整的另一种写法
 //        int c = (n + t - 1) / t * (r - 1);
         char[][] mat = new char[r][c];
-        for(int i = 0, x = 0, y = 0; i < n; ++i){
+        for (int i = 0, x = 0, y = 0; i < n; ++i) {
             mat[x][y] = s.charAt(i);
             // 每个周期会占用矩阵上的 1+r−2=r−1 列
-            if(i % t < r - 1){
-                ++ x; // 向下移动
-            }else{
-                -- x;
-                ++ y; // 向右上移动
+            if (i % t < r - 1) {
+                ++x; // 向下移动
+            } else {
+                --x;
+                ++y; // 向右上移动
             }
         }
         StringBuilder ans = new StringBuilder();
-        for(char[] row : mat){
-            for(char ch : row){
+        for (char[] row : mat) {
+            for (char ch : row) {
                 ans.append(ch);
             }
         }
